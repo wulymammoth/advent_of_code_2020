@@ -2,9 +2,9 @@ use std::collections::HashSet;
 use std::io::Error;
 
 pub fn main() -> Result<u32, Error> {
-    let mut entries: Vec<String> = advent_of_code_2020::entries("day01.txt").unwrap();
+    let entries: Vec<String> = advent_of_code_2020::entries("day01.txt").unwrap();
     let mut nums: Vec<u32> = Vec::new();
-    for entry in entries.iter_mut() {
+    for entry in entries.iter() {
         nums.push(entry.parse::<u32>().unwrap());
     }
     let target = 2020;
