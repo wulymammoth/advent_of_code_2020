@@ -1,3 +1,5 @@
+mod day01;
+
 fn main() {
-    println!("Hello, world!");
+    println!("Day 01 answer: {:?}", day01::main().unwrap());
 }
