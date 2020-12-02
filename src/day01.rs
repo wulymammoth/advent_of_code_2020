@@ -8,10 +8,10 @@ pub fn main() -> Result<u32, Error> {
         nums.push(entry.parse::<u32>().unwrap());
     }
     let target = 2020;
-    Ok(solve(nums, target))
+    Ok(report_repair(nums, target))
 }
 
-fn solve(nums: Vec<u32>, target: u32) -> u32 {
+fn report_repair(nums: Vec<u32>, target: u32) -> u32 {
     let mut set: HashSet<u32> = HashSet::new();
     for num in nums {
         let complement = target - num;
