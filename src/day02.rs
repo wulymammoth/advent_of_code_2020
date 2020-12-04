@@ -1,20 +1,26 @@
-type Range = (i8, i8);
+type Range = (usize, usize);
 
 pub fn main() -> (u32, u32) {
     let lines: Vec<String> = advent_of_code_2020::entries("day02.txt").unwrap();
+
     let mut count_part_1 = 0;
     let mut count_part_2 = 0;
+
+    // NOTE: debugging
+    let mut cnt = 0;
 
     for line in lines {
         let line: Vec<&str> = line.split(' ').collect();
         let range: Vec<&str> = line[0].split('-').collect();
         let range: Range = (
-            range[0].parse::<i8>().unwrap(),
-            range[1].parse::<i8>().unwrap(),
+            range[0].parse::<usize>().unwrap(),
+            range[1].parse::<usize>().unwrap(),
         );
-        let ltr: Vec<&str> = line[1].split(':').collect();
-        let ltr: char = ltr[0].parse().unwrap();
+        let ltr: char = line[1].chars().nth(0).unwrap();
         let password = line[2];
+
+        // NOTE: debugging
+        if cnt < 1 { println!("first password {}", password) }
 
         // part 1
         if validator_one(range, ltr, password) {
@@ -24,6 +30,12 @@ pub fn main() -> (u32, u32) {
         // part 2
         if validator_two(range, ltr, password) {
             count_part_2 += 1;
+
+            // NOTE: debugging
+            cnt += 1;
+            //if cnt <= 1 {
+                //println!("{}", password);
+            //}
         }
     }
 
@@ -48,14 +60,12 @@ fn validator_one(range: Range, letter: char, password: &str) -> bool {
 fn validator_two(range: Range, letter: char, password: &str) -> bool {
     let mut chars = password.chars();
     let (first, second) = range;
-    let position_one = (first - 1) as usize; // offset (not zero-indexed)
-    let position_two = (second - 1) as usize; // offset (not zero-indexed)
     let mut found_position_one = false;
-    if let Some(c) = chars.nth(position_one) {
+    if let Some(c) = chars.nth(first) {
         found_position_one = c == letter;
     }
     let mut found_position_two = false;
-    if let Some(c) = chars.nth(position_two) {
+    if let Some(c) = chars.nth(second) {
         found_position_two = c == letter;
     }
 
