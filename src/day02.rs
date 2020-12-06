@@ -47,7 +47,7 @@ fn validator_two(range: Range, letter: char, password: &str) -> bool {
     let mut chars = password.chars();
     let mut position_one_found = false;
     for i in 0..first {
-        if i == first-1 {
+        if i == first - 1 {
             position_one_found = chars.next().unwrap() == letter;
         } else {
             chars.next();
@@ -57,7 +57,7 @@ fn validator_two(range: Range, letter: char, password: &str) -> bool {
     chars = password.chars(); // reset
     let mut position_two_found = false;
     for j in 0..second {
-        if j == second-1 {
+        if j == second - 1 {
             position_two_found = chars.next().unwrap() == letter;
         } else {
             chars.next();
