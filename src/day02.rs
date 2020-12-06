@@ -6,9 +6,6 @@ pub fn main() -> (u32, u32) {
     let mut count_part_1 = 0;
     let mut count_part_2 = 0;
 
-    // NOTE: debugging
-    let mut cnt = 0;
-
     for line in lines {
         let line: Vec<&str> = line.split(' ').collect();
         let range: Vec<&str> = line[0].split('-').collect();
@@ -19,9 +16,6 @@ pub fn main() -> (u32, u32) {
         let ltr: char = line[1].chars().nth(0).unwrap();
         let password = line[2];
 
-        // NOTE: debugging
-        if cnt < 1 { println!("first password {}", password) }
-
         // part 1
         if validator_one(range, ltr, password) {
             count_part_1 += 1;
@@ -30,12 +24,6 @@ pub fn main() -> (u32, u32) {
         // part 2
         if validator_two(range, ltr, password) {
             count_part_2 += 1;
-
-            // NOTE: debugging
-            cnt += 1;
-            //if cnt <= 1 {
-                //println!("{}", password);
-            //}
         }
     }
 
@@ -53,21 +41,40 @@ fn validator_one(range: Range, letter: char, password: &str) -> bool {
     lo <= count && count <= hi
 }
 
-// offset by 1 (not zero-indexed)
-// between the positional ranges, one of the positions must contain the specified char (letter)
-// - take a slice and check within that slice that the character exists
-// - to avoid slicing, we can just index into the string slice and check for the letter
 fn validator_two(range: Range, letter: char, password: &str) -> bool {
-    let mut chars = password.chars();
     let (first, second) = range;
-    let mut found_position_one = false;
-    if let Some(c) = chars.nth(first) {
-        found_position_one = c == letter;
-    }
-    let mut found_position_two = false;
-    if let Some(c) = chars.nth(second) {
-        found_position_two = c == letter;
+
+    let mut chars = password.chars();
+    let mut position_one_found = false;
+    for i in 0..first {
+        if i == first-1 {
+            position_one_found = chars.next().unwrap() == letter;
+        } else {
+            chars.next();
+        }
     }
 
-    found_position_one ^ found_position_two
+    chars = password.chars(); // reset
+    let mut position_two_found = false;
+    for j in 0..second {
+        if j == second-1 {
+            position_two_found = chars.next().unwrap() == letter;
+        } else {
+            chars.next();
+        }
+    }
+
+    position_one_found ^ position_two_found
+}
+
+#[test]
+fn second_validation() {
+    assert_eq!(validator_two((1, 3), 'a', "abcde"), true);
+    assert_eq!(validator_two((1, 3), 'b', "cdefg"), false);
+    assert_eq!(validator_two((2, 9), 'c', "ccccccccc"), false);
+}
+
+#[test]
+fn test_day_2() {
+    assert_eq!(main(), (493, 593));
 }
