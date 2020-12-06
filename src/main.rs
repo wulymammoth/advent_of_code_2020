@@ -1,3 +1,7 @@
+mod day01;
+mod day02;
+
 fn main() {
-    // Nothing to see here
+    let _ = day01::main();
+    let _ = day02::main();
 }
