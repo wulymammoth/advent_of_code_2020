@@ -5,8 +5,8 @@ def part1(lines):
 
     i, j, remaining = 0, 0, 4
     while i < total_lines:
-        if j == line_length: # reset to beginning of the line (row)
-            j = 0
+        if j == line_length: # out of bounds
+            j = 0 # reset to beginning of the line (row)
 
         if remaining == 0:
             if lines[i][j] == '#':
@@ -30,17 +30,18 @@ def part2(lines, slope):
 
     i, j, remaining = 0, 0, steps
     while i < total_lines:
-        if j == line_length: # reset to beginning of the line (row)
-            j = 0
+        if j == line_length: # out of bounds
+            j = 0 # reset to beginning of the line (row)
 
         if remaining == 0:
             if lines[i][j] == '#':
                 trees_encountered += 1
             remaining = steps # reset
 
-        if remaining <= steps - right: # NOTE: big gotcha here (less than or equal not just equal)
+        # NOTE: big gotcha here (between 1 and right steps that remain)
+        if 1 <= remaining <= steps - right:
             i += 1
-        else: # remaining is zero or greater than one
+        else:
             j += 1
         remaining -= 1
 
@@ -95,6 +96,9 @@ class TestTobogganTrajectory(unittest.TestCase):
             lines = [line.strip() for line in f.readlines()]
 
         ans = [part2(lines, slope) for slope in self.slopes]
-        expected = [75, 294, 79, 85, 39]
-        self.assertEqual(ans, expected)
-        self.assertEqual(functools.reduce(lambda product, trees: product * trees, expected), 5774564250)
+        trees_encountered = [75, 294, 79, 85, 39]
+        self.assertEqual(ans, trees_encountered)
+
+        # PRODUCT
+        product = functools.reduce(lambda product, trees: product * trees, trees_encountered)
+        self.assertEqual(product, 5774564250)
