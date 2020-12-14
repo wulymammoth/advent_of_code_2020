@@ -66,8 +66,3 @@ class TestPassportProcessing(unittest.TestCase):
         with open('day04.txt', 'r') as f:
             batch = [line.strip() for line in f.readlines()]
         self.assertEqual(part1(batch), 204) # too low
-
-if __name__ == '__main__':
-    with open('day04.txt', 'r') as f:
-        lines = [line.strip() for line in f.readlines()]
-    print(lines[:15])
