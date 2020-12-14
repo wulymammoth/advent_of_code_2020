@@ -17,7 +17,7 @@ def valid_height(height):
         if char.isdigit():
             digits.append(char)
         elif char.isalpha():
-            if i < 3: # we must have '#' and at least two digits
+            if i < 2: # we must have '#' and at least two digits
                 return False
             suffix = height[i:]
             if suffix not in ['cm', 'in']:
@@ -31,9 +31,10 @@ def valid_height(height):
 def valid_hair_color(hair):
     'number followed by exactly six chars that are 0-9 or a-f' # assuming case sensitivity here
     prefix, suffix = hair[:len(hair)-6], hair[-6:]
-    if prefix[0] != '#':
+    if len(prefix) == 0 or prefix[0] != '#':
         return False
-    for char in prefix:
+    for i in range(1, len(prefix)):
+        char = prefix[i]
         if not char.isdigit():
             return False
     for char in suffix:
@@ -44,7 +45,7 @@ def valid_hair_color(hair):
     return True
 
 def valid_passport_id(pid):
-    if len(pid) < 9:
+    if len(pid) != 9:
         return False
     for digit in pid:
         if not digit.isdigit():
@@ -132,13 +133,11 @@ class TestPassportProcessing(unittest.TestCase):
         self.assertFalse(VALIDATORS['hgt']('190in'))
         self.assertFalse(VALIDATORS['hgt']('190'))
 
-    @unittest.skip
     def test_hcl_validator(self):
         self.assertTrue(VALIDATORS['hcl']('#123abc'))
         self.assertFalse(VALIDATORS['hcl']('123abc'))
         self.assertFalse(VALIDATORS['hcl']('#123abz'))
 
-    @unittest.skip
     def test_pid_validator(self):
         self.assertTrue(VALIDATORS['pid']('000000001'))
         self.assertFalse(VALIDATORS['pid']('0123456789'))
