@@ -11,7 +11,7 @@ REQUIRED_FIELDS = [
 
 EYE_COLORS = {'amb', 'blu', 'brn', 'gry', 'grn', 'hzl', 'oth'}
 
-def valid_height(height):
+def is_valid_height(height):
     digits = []
     for i, char in enumerate(height):
         if char.isdigit():
@@ -28,7 +28,7 @@ def valid_height(height):
             return False
     return False
 
-def valid_hair_color(hair):
+def is_valid_hair_color(hair):
     'number followed by exactly six chars that are 0-9 or a-f' # assuming case sensitivity here
     prefix, suffix = hair[:len(hair)-6], hair[-6:]
     if len(prefix) == 0 or prefix[0] != '#':
@@ -44,7 +44,7 @@ def valid_hair_color(hair):
             return False
     return True
 
-def valid_passport_id(pid):
+def is_valid_passport_id(pid):
     if len(pid) != 9:
         return False
     for digit in pid:
@@ -56,10 +56,10 @@ VALIDATORS = {
     'byr': lambda year: len(year) >= 4 and 1920 <= int(year) <= 2002,
     'iyr': lambda year: len(year) >= 4 and 2010 <= int(year) <= 2020,
     'eyr': lambda year: len(year) >= 4 and 2020 <= int(year) <= 2030,
-    'hgt': valid_height,
-    'hcl': valid_hair_color,
+    'hgt': is_valid_height,
+    'hcl': is_valid_hair_color,
     'ecl': lambda eye_color: eye_color in EYE_COLORS,
-    'pid': valid_passport_id
+    'pid': is_valid_passport_id
 }
 
 def valid(document, check_fields=False):
