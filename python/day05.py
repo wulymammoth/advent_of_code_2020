@@ -10,8 +10,7 @@ def part1(encoding):
     row_encoding, col_encoding = encoding[:7], encoding[-3:]
 
     # determine row
-    lo, hi = 0, 127
-    row = -1
+    lo, hi, row = 0, 127, -1
     for half in row_encoding:
         row = (lo + hi) // 2
         if half == 'F': # front (take lower/left half)
@@ -20,16 +19,16 @@ def part1(encoding):
             lo = row
 
     # determine column
-    lo, hi = 0, 7
-    col = -1
+    lo, hi, col = 0, 7, -1
     for half in col_encoding:
         mid = (lo + hi) // 2
+        left, right = mid, mid + 1
         if half == 'L': # lower/left half
             hi = mid
-            col = hi
-        else: # upper/right half
+            col = left
+        else: # 'R' upper/right half
             lo = mid
-            col = lo
+            col = right
 
     seat_id = row * 8 + col
 
@@ -40,9 +39,9 @@ Case = collections.namedtuple('Case', ['pass_encoding', 'location', 'id'])
 class TestBinaryBoarding(unittest.TestCase):
     def setUp(self):
         self.scenarios = [
-            Case('BFFFBBFRRR', (70, 7), 567),
-            # Case('FFFBBBFRRR', (14, 7), 119),
-            # Case('BBFFBBFRLL', (102, 4), 820),
+            Case('BFFFBBFRRR', (70, 7), 567), # 4-7 -> 6-7 -> 7
+            Case('FFFBBBFRRR', (14, 7), 119),
+            Case('BBFFBBFRLL', (102, 4), 820),
         ]
 
     def test_part1_basic(self):
